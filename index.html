@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0B1410" />
+<title>Prodromal — Your body whispers 36 hours before it shouts</title>
+<meta name="description" content="Prodromal listens to your body's earliest signals — HRV, temperature, breath — to catch illness 36 hours before symptoms." />
+<meta property="og:title" content="Prodromal — Catch illness 36 hours before it starts" />
+<meta property="og:description" content="The first AI health coach that reads your body's earliest signals to catch illness before symptoms." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://prodromal.ai" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg: #0B1410;
+    --bg-2: #09120E;
+    --accent: #85C8AF;
+    --accent-dim: #6DB39A;
+    --accent-glow: #9BD4C0;
+    --warm: #FFC580;
+    --coral: #FF9472;
+    --text: #F2F7F3;
+    --text-2: rgba(242, 247, 243, 0.62);
+    --text-3: rgba(242, 247, 243, 0.38);
+    --text-4: rgba(242, 247, 243, 0.22);
+    --border: rgba(255, 255, 255, 0.06);
+    --border-hi: rgba(155, 212, 192, 0.18);
+    --max: 1200px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--bg);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter Tight', system-ui, -apple-system, sans-serif;
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    font-weight: 400;
+  }
+
+  /* ======= SINGLE SUBTLE ATMOSPHERE ======= */
+  .ambient {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .ambient::before {
+    content: '';
+    position: absolute;
+    top: -20%; left: 50%;
+    transform: translateX(-50%);
+    width: 1200px; height: 1200px;
+    background: radial-gradient(circle, rgba(133, 200, 175, 0.10) 0%, transparent 55%);
+    filter: blur(40px);
+  }
+  .ambient::after {
+    content: '';
+    position: absolute;
+    bottom: -10%; right: -10%;
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(255, 197, 128, 0.04) 0%, transparent 55%);
+    filter: blur(40px);
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  main, nav, footer { position: relative; z-index: 10; }
+
+  /* ======= NAV ======= */
+  nav {
+    position: fixed;
+    top: 24px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    display: flex; align-items: center; gap: 36px;
+    padding: 10px 14px 10px 20px;
+    border-radius: 999px;
+    background: rgba(11, 20, 16, 0.55);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border: 1px solid var(--border);
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px;
+    letter-spacing: -0.005em;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .nav-mark {
+    width: 26px; height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-mark svg { width: 100%; height: 100%; display: block; }
+  .nav-links {
+    display: flex; gap: 26px;
+    font-size: 13px;
+  }
+  .nav-links a {
+    color: var(--text-2);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    display: inline-flex;
+    padding: 7px 16px;
+    color: var(--text);
+    background: transparent;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 999px;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: inherit;
+    border: 1px solid var(--border-hi);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .nav-cta:hover {
+    background: rgba(133, 200, 175, 0.08);
+    border-color: rgba(133, 200, 175, 0.35);
+  }
+
+  /* ======= TYPOGRAPHY ======= */
+  h1, h2, h3 {
+    font-family: 'Inter Tight', sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.028em;
+    line-height: 1.05;
+  }
+  .serif {
+    font-family: 'Instrument Serif', 'New York', serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+  .kicker.w-slash::before {
+    content: '// ';
+    color: var(--text-3);
+  }
+
+  /* ======= BUTTONS ======= */
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 13px 24px;
+    font-weight: 500; font-size: 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: inherit;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-hi);
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  }
+  .btn:hover {
+    background: rgba(133, 200, 175, 0.06);
+    border-color: rgba(133, 200, 175, 0.45);
+  }
+  .btn .arr {
+    display: inline-block;
+    color: var(--accent);
+    transition: transform 0.3s;
+  }
+  .btn:hover .arr { transform: translateX(3px); }
+
+  .btn-solid {
+    background: var(--accent);
+    color: var(--bg);
+    border: 1px solid transparent;
+    font-weight: 500;
+  }
+  .btn-solid:hover {
+    background: var(--accent-glow);
+    border-color: transparent;
+  }
+  .btn-solid .arr { color: var(--bg); }
+
+  /* ======= HERO (combined poetic moment) ======= */
+  .hero {
+    min-height: 100vh;
+    padding: 96px 32px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+  }
+  .hero-top-kicker {
+    margin-bottom: 20px;
+  }
+
+  .hero-orb {
+    width: min(240px, 32vw);
+    height: min(240px, 32vw);
+    margin: 24px auto 24px;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+  @media (min-height: 900px) {
+    .hero-orb { width: min(300px, 38vw); height: min(300px, 38vw); }
+  }
+  @media (max-height: 780px) {
+    .hero-orb { width: min(180px, 24vw); height: min(180px, 24vw); margin: 12px auto; }
+  }
+
+  .hero-caption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    max-width: 680px;
+  }
+  .hero .hero-headline-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero .hero-tail-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    max-width: 560px;
+  }
+  .hero h1 {
+    font-size: clamp(30px, 4.2vw, 48px);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    max-width: 22ch;
+    color: var(--text);
+  }
+  .hero h1 .serif {
+    font-size: 1.05em;
+  }
+  .hero .listens-line {
+    font-size: clamp(32px, 4.8vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    font-weight: 400;
+    font-family: 'Inter Tight', sans-serif;
+    color: var(--text);
+  }
+  .hero .listens-line .serif {
+    color: var(--accent-glow);
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-2);
+    max-width: 52ch;
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+
+  /* ======= GENERIC SECTION ======= */
+  .section {
+    padding: 160px 32px;
+    position: relative;
+  }
+  .container {
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+  .section-head {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 80px;
+    align-items: end;
+    margin-bottom: 100px;
+  }
+  .section-head .kicker { display: block; margin-bottom: 28px; }
+  .section-head h2 {
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    max-width: 18ch;
+  }
+  .section-head p {
+    font-size: 17px;
+    color: var(--text-2);
+    max-width: 48ch;
+    line-height: 1.6;
+  }
+  @media (max-width: 900px) {
+    .section-head { grid-template-columns: 1fr; gap: 32px; align-items: start; margin-bottom: 60px; }
+  }
+
+  /* ======= STATEMENT (centered full-viewport moment) ======= */
+  .statement {
+    padding: 140px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 68vh;
+    position: relative;
+  }
+  .statement-problem {
+    padding-bottom: 100px;
+  }
+  .statement-solution {
+    padding-top: 100px;
+    position: relative;
+  }
+  .statement-solution::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px; height: 64px;
+    background: linear-gradient(180deg, transparent, var(--accent-glow), transparent);
+    opacity: 0.4;
+  }
+  .statement .kicker { margin-bottom: 36px; }
+  .statement h2 {
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    max-width: 22ch;
+    color: var(--text);
+  }
+  .statement h2 .serif {
+    color: var(--accent-glow);
+  }
+  .statement-sub {
+    margin-top: 32px;
+    font-size: 17px;
+    color: var(--text-2);
+    max-width: 54ch;
+    line-height: 1.6;
+  }
+  .statement-viz {
+    width: 100%;
+    max-width: 860px;
+    margin: 80px auto 0;
+    padding: 36px 36px 28px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005));
+    border: 1px solid var(--border);
+  }
+  .statement-viz .window-svg { width: 100%; height: 120px; display: block; }
+  .statement-viz .window-labels {
+    display: flex; justify-content: space-between; margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .statement-viz .window-labels .warn { color: var(--warm); opacity: 0.8; }
+  .statement-viz .window-labels .hot { color: var(--coral); opacity: 0.8; }
+
+  /* ======= WINDOW VIZ (legacy, unused after restructure) ======= */
+  .window-card {
+    border-radius: 24px;
+    padding: 56px 48px 44px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .window-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 40%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-dim), transparent);
+    opacity: 0.3;
+  }
+  .window-svg {
+    width: 100%; height: 160px; display: block;
+  }
+  .window-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  .window-labels .warn { color: var(--warm); opacity: 0.8; }
+  .window-labels .hot { color: var(--coral); opacity: 0.8; }
+
+  /* ======= HOW: asymmetric phases ======= */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 120px;
+  }
+  .phase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .phase.flip .p-visual { order: -1; }
+  @media (max-width: 900px) {
+    .phase { grid-template-columns: 1fr; gap: 36px; }
+    .phase.flip .p-visual { order: 0; }
+  }
+  .p-num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--accent-dim);
+    margin-bottom: 20px;
+  }
+  .p-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 20px;
+  }
+  .p-title {
+    font-size: clamp(28px, 3.6vw, 40px);
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    font-weight: 400;
+    max-width: 16ch;
+  }
+  .p-desc {
+    font-size: 17px;
+    color: var(--text-2);
+    line-height: 1.6;
+    max-width: 42ch;
+  }
+  .p-visual {
+    aspect-ratio: 1 / 1;
+    max-width: 440px;
+    border-radius: 28px;
+    background: radial-gradient(circle at 50% 40%, rgba(133, 200, 175, 0.08), transparent 65%);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* orb visual */
+  .orb-visual {
+    width: 55%; aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, #C4E6D4 0%, #9BD4C0 35%, #6DB39A 70%, #2E5A48 100%);
+    box-shadow:
+      0 0 50px rgba(133, 200, 175, 0.35),
+      inset 0 -16px 30px rgba(0, 0, 0, 0.25),
+      inset 0 16px 30px rgba(255, 255, 255, 0.10);
+    animation: breath 9s ease-in-out infinite;
+  }
+  @keyframes breath {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+
+  /* scatter visual */
+  .scatter-svg { width: 75%; height: 65%; }
+
+  /* protocol visual */
+  .protocol {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .protocol-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .tick {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .tick::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-55%, -65%) rotate(45deg);
+    width: 4px; height: 7px;
+    border: solid var(--bg);
+    border-width: 0 1.5px 1.5px 0;
+  }
+  .protocol-item .time {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-3);
+    letter-spacing: 0.1em;
+  }
+
+  /* ======= MOAT ======= */
+  .moat {
+    padding: 160px 32px;
+    text-align: center;
+  }
+  .moat .kicker { margin-bottom: 28px; }
+  .moat h2 {
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    max-width: 18ch;
+    margin: 0 auto;
+  }
+  .moat > .container > p {
+    margin: 32px auto 0;
+    font-size: 17px;
+    color: var(--text-2);
+    max-width: 52ch;
+    line-height: 1.6;
+  }
+  .moat-stat-inline {
+    margin: 72px auto 0;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 18px 32px;
+    border-radius: 999px;
+    background: rgba(133, 200, 175, 0.06);
+    border: 1px solid var(--border-hi);
+  }
+  .moat-stat-inline-num {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--accent-glow);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .moat-stat-inline-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-2);
+  }
+
+  /* ======= TESTIMONIALS ======= */
+  .testimonials {
+    padding: 160px 0;
+    position: relative;
+  }
+  .testimonials-head {
+    text-align: center;
+    padding: 0 32px;
+    margin-bottom: 80px;
+  }
+  .testimonials-head .kicker { display: inline-block; margin-bottom: 24px; }
+  .testimonials-head h2 {
+    font-size: clamp(36px, 5vw, 64px);
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    max-width: 22ch;
+    margin: 0 auto;
+    line-height: 1.05;
+  }
+  .marquee {
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, black 10%, black 90%, transparent 100%);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: mq 120s linear infinite;
+  }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  .t-disclaimer {
+    text-align: center;
+    padding: 48px 32px 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+  @keyframes mq {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .t-card {
+    width: 440px;
+    flex-shrink: 0;
+    padding: 32px 28px 28px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .t-mark {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 40px;
+    line-height: 0.5;
+    color: var(--accent-dim);
+    opacity: 0.5;
+    height: 20px;
+  }
+  .t-text {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--text);
+    flex: 1;
+  }
+  .t-text em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent-glow);
+  }
+  .t-author {
+    display: flex; align-items: center; gap: 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+  .t-avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 500; font-size: 11px;
+    color: var(--bg);
+    flex-shrink: 0;
+  }
+  .av1 { background: linear-gradient(135deg, #9BD4C0, #6DB39A); }
+  .av2 { background: linear-gradient(135deg, #FFC580, #D9A260); }
+  .av3 { background: linear-gradient(135deg, #C4B3E8, #9D8BCC); }
+  .av4 { background: linear-gradient(135deg, #A8E6C9, #6DB39A); }
+  .av5 { background: linear-gradient(135deg, #FF9472, #D67558); }
+  .av6 { background: linear-gradient(135deg, #85C8AF, #4FA086); }
+  .t-name { font-size: 13px; font-weight: 500; }
+  .t-meta { font-size: 11px; color: var(--text-3); letter-spacing: 0.02em; }
+
+  /* ======= SCIENCE ======= */
+  .science-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 80px;
+  }
+  @media (max-width: 900px) {
+    .science-grid { grid-template-columns: 1fr; }
+  }
+  .sci {
+    padding: 36px 30px 32px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column;
+  }
+  .sci-stat {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .sci p {
+    color: var(--text-2);
+    font-size: 15px;
+    line-height: 1.55;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+  .sci-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  /* ======= PRICING ======= */
+  .pricing {
+    padding: 160px 32px;
+    text-align: center;
+  }
+  .pricing-head { margin-bottom: 80px; }
+  .pricing-head .kicker { display: inline-block; margin-bottom: 24px; }
+  .pricing-head h2 {
+    font-size: clamp(36px, 5vw, 64px);
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    max-width: 22ch;
+    margin: 0 auto 20px;
+    line-height: 1.05;
+  }
+  .pricing-head p {
+    font-size: 15px;
+    color: var(--text-3);
+    max-width: 48ch;
+    margin: 24px auto 0;
+  }
+  .price-contrast {
+    display: inline-flex;
+    align-items: center;
+    gap: 40px;
+    margin: 56px auto 8px;
+    padding: 32px 44px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+    border: 1px solid var(--border);
+  }
+  @media (max-width: 600px) {
+    .price-contrast { flex-direction: column; gap: 16px; padding: 28px 24px; }
+  }
+  .price-contrast-col {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0.6;
+  }
+  .price-contrast-col-hero { opacity: 1; }
+  .price-contrast-num {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: clamp(44px, 6vw, 68px);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: var(--text-2);
+    font-weight: 400;
+  }
+  .price-contrast-col-hero .price-contrast-num {
+    background: linear-gradient(180deg, #F2F7F3 0%, #9BD4C0 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .price-contrast-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    text-align: center;
+  }
+  .price-contrast-col-hero .price-contrast-label { color: var(--accent-glow); }
+  .price-contrast-vs {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--text-3);
+    padding: 0 4px;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1080px;
+    margin: 0 auto;
+    align-items: stretch;
+  }
+  @media (max-width: 980px) {
+    .pricing-grid { grid-template-columns: 1fr; max-width: 440px; }
+  }
+  .plan-badge-scarce {
+    position: absolute;
+    top: -10px; right: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--warm);
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 1px solid rgba(255, 197, 128, 0.35);
+    font-weight: 500;
+  }
+  .plan-save-badge {
+    display: inline-block;
+    margin-left: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(133, 200, 175, 0.12);
+    border: 1px solid rgba(133, 200, 175, 0.3);
+    vertical-align: middle;
+  }
+  .plan {
+    padding: 36px 32px 32px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.005));
+    border: 1px solid var(--border);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .plan-featured {
+    border-color: var(--border-hi);
+    background: linear-gradient(180deg, rgba(133, 200, 175, 0.04), rgba(255,255,255,0.005));
+  }
+  .plan-featured::before {
+    content: 'Recommended';
+    position: absolute;
+    top: -10px; left: 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--bg);
+    border: 1px solid var(--border-hi);
+    font-weight: 500;
+  }
+  .plan-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .plan-price {
+    display: flex; align-items: baseline; gap: 6px;
+    margin-bottom: 4px;
+  }
+  .plan-amount {
+    font-size: 44px;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+  .plan-period { color: var(--text-3); font-size: 14px; }
+  .plan-billing {
+    color: var(--text-3);
+    font-size: 12px;
+    margin-bottom: 24px;
+    letter-spacing: 0.02em;
+  }
+  .plan-divider {
+    height: 1px;
+    background: var(--border);
+    margin-bottom: 24px;
+  }
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex: 1;
+  }
+  .plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .plan-features li .check {
+    width: 14px; height: 14px;
+    margin-top: 4px;
+    border-radius: 50%;
+    background: transparent;
+    flex-shrink: 0;
+    position: relative;
+    border: 1px solid var(--accent-dim);
+  }
+  .plan-features li .check::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-55%, -65%) rotate(45deg);
+    width: 3px; height: 6px;
+    border: solid var(--accent);
+    border-width: 0 1.5px 1.5px 0;
+  }
+  .plan-cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 13px 22px;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .cta-solid {
+    background: var(--accent);
+    color: var(--bg);
+    border: 1px solid transparent;
+  }
+  .cta-solid:hover { background: var(--accent-glow); }
+  .cta-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-hi);
+  }
+  .cta-ghost:hover {
+    background: rgba(133, 200, 175, 0.06);
+    border-color: rgba(133, 200, 175, 0.4);
+  }
+  .pricing-foot {
+    margin-top: 40px;
+    font-size: 12px;
+    color: var(--text-3);
+  }
+  .pricing-foot a {
+    color: var(--text-2);
+    text-decoration: underline;
+    text-decoration-color: var(--text-4);
+    text-underline-offset: 3px;
+  }
+
+  /* ======= FINAL ======= */
+  .final {
+    padding: 200px 32px 140px;
+    text-align: center;
+  }
+  .final .kicker { display: inline-block; margin-bottom: 32px; }
+  .final h2 {
+    font-size: clamp(40px, 5.4vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    max-width: 18ch;
+    margin: 0 auto 32px;
+  }
+  .final p {
+    font-size: 17px;
+    color: var(--text-2);
+    max-width: 46ch;
+    margin: 0 auto 48px;
+  }
+
+  /* ======= FOOTER ======= */
+  footer {
+    padding: 80px 32px 40px;
+    border-top: 1px solid var(--border);
+  }
+  .footer-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  @media (max-width: 800px) {
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+  .footer-brand {
+    display: flex; flex-direction: column; gap: 12px;
+    max-width: 260px;
+  }
+  .footer-brand .nav-brand { font-size: 15px; }
+  .footer-tag {
+    font-size: 12px;
+    color: var(--text-3);
+    line-height: 1.55;
+  }
+  .footer-col { display: flex; flex-direction: column; gap: 10px; }
+  .footer-col-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 6px;
+  }
+  .footer-col a {
+    color: var(--text-2);
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--text); }
+  .footer-bottom {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-4);
+    text-transform: uppercase;
+  }
+
+  /* ======= MODAL ======= */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(5, 9, 5, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .modal-backdrop.active { display: flex; opacity: 1; }
+  .modal {
+    max-width: 440px;
+    width: 100%;
+    padding: 40px 36px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(26, 37, 32, 0.94), rgba(11, 20, 16, 0.94));
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid var(--border-hi);
+    position: relative;
+    transform: scale(0.96);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .modal-backdrop.active .modal { transform: scale(1); }
+  .modal-close {
+    position: absolute;
+    top: 14px; right: 14px;
+    background: transparent;
+    border: none;
+    color: var(--text-3);
+    cursor: pointer;
+    padding: 8px;
+    font-size: 16px;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal .kicker { display: inline-block; margin-bottom: 16px; }
+  .modal h3 {
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .modal h3 .serif { font-weight: 400; }
+  .modal p {
+    color: var(--text-2);
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 1.55;
+  }
+  .modal form { display: flex; flex-direction: column; gap: 12px; }
+  .modal input {
+    padding: 13px 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .modal input:focus { border-color: var(--border-hi); }
+  .modal input::placeholder { color: var(--text-4); }
+  .modal button[type="submit"] {
+    padding: 13px 20px;
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 500;
+    font-size: 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.3s;
+  }
+  .modal button[type="submit"]:hover { background: var(--accent-glow); }
+  .modal-success { display: none; text-align: center; padding: 12px 0; }
+  .modal-success.active { display: block; }
+  .modal-success h3 { color: var(--accent); }
+
+  /* ======= REVEAL ======= */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .d1 { transition-delay: 0.15s; }
+  .d2 { transition-delay: 0.3s; }
+  .d3 { transition-delay: 0.45s; }
+
+  /* ======= RESPONSIVE ======= */
+  @media (max-width: 768px) {
+    body { font-size: 15px; }
+    nav {
+      top: 14px;
+      padding: 8px 10px 8px 16px;
+      gap: 14px;
+    }
+    .nav-links { display: none; }
+    .section, .moat, .pricing, .testimonials, .listens, .final, .hero {
+      padding-left: 20px; padding-right: 20px;
+    }
+    .section, .moat, .pricing, .final { padding-top: 100px; padding-bottom: 100px; }
+    .hero { padding: 110px 20px 80px; }
+    .t-card { width: 320px; padding: 24px 22px; }
+    .phase { gap: 32px; }
+    .hero-orb { width: min(440px, 85vw); height: min(440px, 85vw); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01s !important;
+    }
+    .marquee-track { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+<div class="grain"></div>
+
+<nav>
+  <a href="#" class="nav-brand">
+    <span class="nav-mark"></span>
+    Prodromal
+  </a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#science">Science</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <button class="nav-cta" onclick="openModal()">Get the app</button>
+</nav>
+
+<main>
+
+<!-- ======= HERO (combined poetic moment) ======= -->
+<section class="hero">
+  <span class="kicker w-slash hero-top-kicker reveal">Prodromal · Coming soon</span>
+
+  <div class="hero-headline-stack">
+    <h1 class="reveal d1">Your body <span class="serif">whispers</span> 36 hours before it shouts.</h1>
+  </div>
+
+  <!-- The POrb is the visual breath between the two lines — polyrhythmic, listening -->
+  <svg class="hero-orb reveal d2" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="core" cx="36%" cy="30%" r="68%">
+        <stop offset="0%" stop-color="#E1EFE7" stop-opacity="0.98"/>
+        <stop offset="28%" stop-color="#9BD4C0" stop-opacity="0.85"/>
+        <stop offset="60%" stop-color="#6DB39A" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#1F3B2E" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="core-inner" cx="36%" cy="30%" r="55%">
+        <stop offset="0%" stop-color="#F0F8F3" stop-opacity="0.7"/>
+        <stop offset="60%" stop-color="#9BD4C0" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="softBlur" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="1.5"/>
+      </filter>
+    </defs>
+
+    <!-- Slow rotating dashed outer ring (TEMP cycle, ~80s) -->
+    <circle cx="300" cy="300" r="285" fill="none" stroke="rgba(155,212,192,0.22)" stroke-width="0.7" stroke-dasharray="1 12" style="transform-origin:300px 300px; animation: hRotSlow 80s linear infinite"/>
+
+    <!-- Second rotating ring (counter, 140s) -->
+    <circle cx="300" cy="300" r="250" fill="none" stroke="rgba(155,212,192,0.2)" stroke-width="0.6" stroke-dasharray="3 14" style="transform-origin:300px 300px; animation: hRotSlowRev 140s linear infinite"/>
+
+    <!-- Outer breath ring (RESP: 4s breath cycle) -->
+    <circle cx="300" cy="300" r="220" fill="none" stroke="rgba(155,212,192,0.35)" stroke-width="1" style="animation: hBreath 4s ease-in-out infinite"/>
+
+    <!-- HRV heartbeat ring (0.9s) -->
+    <circle cx="300" cy="300" r="188" fill="none" stroke="rgba(168,230,201,0.45)" stroke-width="1.2" style="animation: hHRV 0.9s ease-in-out infinite"/>
+
+    <!-- RHR offset heartbeat (1.05s) -->
+    <circle cx="300" cy="300" r="160" fill="none" stroke="rgba(133,200,175,0.55)" stroke-width="1" style="animation: hRHR 1.05s ease-in-out infinite"/>
+
+    <!-- Scanline (5s sweep — suggests AI reading) -->
+    <line x1="300" y1="300" x2="300" y2="60" stroke="rgba(155,212,192,0.45)" stroke-width="0.8" stroke-linecap="round" style="transform-origin:300px 300px; animation: hScan 5s linear infinite"/>
+
+    <!-- Core orb (8s breath — matches human resting respiration, not heartbeat) -->
+    <g style="animation: hCore 8s ease-in-out infinite; transform-origin: 300px 300px;">
+      <circle cx="300" cy="300" r="130" fill="url(#core)"/>
+      <circle cx="300" cy="300" r="130" fill="url(#core-inner)"/>
+      <!-- Specular highlight shifting subtly -->
+      <ellipse cx="268" cy="258" rx="30" ry="17" fill="rgba(255,255,255,0.26)" transform="rotate(-20 268 258)" filter="url(#softBlur)" style="animation: hHighlight 11s ease-in-out infinite"/>
+    </g>
+
+    <!-- Inner pulse ring (tight around core, subtle, 2.2s) -->
+    <circle cx="300" cy="300" r="140" fill="none" stroke="rgba(225,239,231,0.18)" stroke-width="0.5" style="animation: hInnerPulse 2.2s ease-in-out infinite"/>
+  </svg>
+
+  <style>
+    @keyframes hCore {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.06); filter: brightness(1.08); }
+    }
+    @keyframes hBreath {
+      0%, 100% { stroke-opacity: 0.18; transform: scale(1); }
+      50% { stroke-opacity: 0.55; transform: scale(1.008); }
+      transform-origin: 300px 300px;
+    }
+    @keyframes hHRV {
+      0%, 100% { stroke-width: 1; opacity: 0.35; }
+      55% { stroke-width: 1.6; opacity: 0.85; }
+    }
+    @keyframes hRHR {
+      0%, 100% { stroke-width: 0.8; opacity: 0.4; }
+      60% { stroke-width: 1.4; opacity: 0.8; }
+    }
+    @keyframes hScan {
+      0% { transform: rotate(0); opacity: 0; }
+      10%, 90% { opacity: 0.6; }
+      100% { transform: rotate(360deg); opacity: 0; }
+    }
+    @keyframes hRotSlow {
+      from { transform: rotate(0); } to { transform: rotate(360deg); }
+    }
+    @keyframes hRotSlowRev {
+      from { transform: rotate(0); } to { transform: rotate(-360deg); }
+    }
+    @keyframes hHighlight {
+      0%, 100% { opacity: 0.28; }
+      50% { opacity: 0.18; }
+    }
+    @keyframes hInnerPulse {
+      0%, 100% { r: 138; opacity: 0.1; }
+      50% { r: 148; opacity: 0.3; }
+    }
+  </style>
+
+  <div class="hero-tail-stack">
+    <div class="listens-line reveal d2">Prodromal <span class="serif">listens.</span></div>
+    <p class="hero-sub reveal d3">Before you feel sick, your body is already whispering. Prodromal is the first thing that listens — a private physician who has studied one body. Yours.</p>
+  </div>
+</section>
+
+<!-- ======= PROBLEM (centered, full-bleed) ======= -->
+<section class="statement statement-problem">
+  <span class="kicker w-slash reveal">The window nobody looks at</span>
+  <h2 class="reveal d1">For ten years, your fitness wearables have been writing a <span class="serif">diary</span> of your body.</h2>
+  <p class="statement-sub reveal d2">Nothing has ever bothered to read it.</p>
+</section>
+
+<!-- ======= SOLUTION (centered, full-bleed) ======= -->
+<section class="statement statement-solution">
+  <span class="kicker w-slash reveal">Until now</span>
+  <h2 class="reveal d1">Prodromal reads the signal — and teaches you to catch illness <span class="serif">before</span> it catches you.</h2>
+  <p class="statement-sub reveal d2">36 hours is enough to change what happens next. Rest the night before. Take zinc early. Sleep nine hours. The illness that would have wrecked your week becomes the one you won.</p>
+
+  <!-- Waveform as subtle supporting visual -->
+  <div class="statement-viz reveal d3">
+    <svg class="window-svg" viewBox="0 0 1160 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="wGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#85C8AF" stop-opacity="0"/>
+          <stop offset="15%" stop-color="#85C8AF" stop-opacity="0.9"/>
+          <stop offset="55%" stop-color="#FFC580" stop-opacity="0.9"/>
+          <stop offset="88%" stop-color="#FF9472" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#FF9472" stop-opacity="0.2"/>
+        </linearGradient>
+      </defs>
+      <line x1="20" y1="62" x2="1140" y2="62" stroke="rgba(133,200,175,0.16)" stroke-dasharray="2 6" stroke-width="0.7"/>
+      <path d="M 20 62 Q 100 60, 160 64 Q 220 67, 280 62 Q 340 56, 400 65 Q 460 75, 520 58 Q 580 42, 640 68 Q 700 95, 760 55 Q 820 30, 880 78 Q 940 110, 1000 48 Q 1060 0, 1120 92" fill="none" stroke="url(#wGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="1050" y1="0" x2="1050" y2="120" stroke="rgba(255,148,114,0.3)" stroke-dasharray="2 4" stroke-width="0.8"/>
+      <circle cx="1050" cy="62" r="4" fill="#FF9472"/>
+      <line x1="160" y1="0" x2="160" y2="120" stroke="rgba(133,200,175,0.22)" stroke-dasharray="2 4" stroke-width="0.8"/>
+      <circle cx="160" cy="62" r="3" fill="#85C8AF"/>
+    </svg>
+    <div class="window-labels">
+      <span>– 14 days · Baseline</span>
+      <span class="warn">– 36h · Drift detected</span>
+      <span class="hot">0h · Symptoms</span>
+    </div>
+  </div>
+</section>
+
+<!-- ======= HOW IT WORKS ======= -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="kicker w-slash reveal">How it works</span>
+        <h2 class="reveal d1">Three phases. <br/>One <span class="serif">head start.</span></h2>
+      </div>
+    </div>
+
+    <div class="phases">
+      <!-- 01 Listen -->
+      <div class="phase">
+        <div class="p-text reveal">
+          <div class="p-num serif">01</div>
+          <div class="p-label">Listen</div>
+          <h3 class="p-title">We read what you already record.</h3>
+          <p class="p-desc">Prodromal pulls HRV, resting heart rate, respiration, and body temperature from Apple Health 24/7. No new wearable. No new routine. Your existing Apple Watch does everything it needs to.</p>
+        </div>
+        <div class="p-visual reveal d1">
+          <div class="orb-visual"></div>
+        </div>
+      </div>
+
+      <!-- 02 Learn -->
+      <div class="phase flip">
+        <div class="p-text reveal">
+          <div class="p-num serif">02</div>
+          <div class="p-label">Learn</div>
+          <h3 class="p-title">Your body's unique signature.</h3>
+          <p class="p-desc">Over 14 quiet days, Prodromal builds your personal baseline — not a population average. Your HRV at 3am. Your resting heart rate before a workout. Every pattern, mapped to you.</p>
+        </div>
+        <div class="p-visual reveal d1">
+          <svg class="scatter-svg" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+            <line x1="20" y1="170" x2="280" y2="170" stroke="rgba(242,247,243,0.06)"/>
+            <line x1="20" y1="20" x2="20" y2="170" stroke="rgba(242,247,243,0.06)"/>
+            <rect x="20" y="80" width="260" height="28" fill="rgba(133,200,175,0.05)"/>
+            <line x1="20" y1="94" x2="280" y2="94" stroke="rgba(133,200,175,0.28)" stroke-dasharray="2 5" stroke-width="0.7"/>
+            <g fill="#85C8AF">
+              <circle cx="40" cy="96" r="2.5"/>
+              <circle cx="60" cy="88" r="2.5"/>
+              <circle cx="80" cy="101" r="2.5"/>
+              <circle cx="100" cy="92" r="2.5"/>
+              <circle cx="120" cy="85" r="2.5"/>
+              <circle cx="140" cy="97" r="2.5"/>
+              <circle cx="160" cy="89" r="2.5"/>
+              <circle cx="180" cy="94" r="2.5"/>
+              <circle cx="200" cy="87" r="2.5"/>
+              <circle cx="220" cy="100" r="2.5"/>
+              <circle cx="240" cy="91" r="2.5"/>
+              <circle cx="260" cy="95" r="2.5"/>
+            </g>
+            <text x="150" y="40" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="rgba(242,247,243,0.35)" letter-spacing="0.15em">HRV · 52 MS</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 03 Act -->
+      <div class="phase">
+        <div class="p-text reveal">
+          <div class="p-num serif">03</div>
+          <div class="p-label">Act</div>
+          <h3 class="p-title">Specific. Timed. <span class="serif">Personal.</span></h3>
+          <p class="p-desc">When something drifts, you get a protocol — not "rest and drink fluids." Exact dosages. Exact timing. Adapted to what's worked for you before. Less guessing. Faster recovery.</p>
+        </div>
+        <div class="p-visual reveal d1">
+          <div class="protocol">
+            <div class="protocol-item"><span class="tick"></span>Zinc, 15mg<span class="time">NOW</span></div>
+            <div class="protocol-item"><span class="tick"></span>500ml water<span class="time">10:00</span></div>
+            <div class="protocol-item"><span class="tick"></span>Skip workout<span class="time">TODAY</span></div>
+            <div class="protocol-item"><span class="tick"></span>Sleep<span class="time">21:30</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= SOUL MATE DOCTOR ======= -->
+<section class="moat">
+  <div class="container">
+    <span class="kicker w-slash reveal">A doctor for one</span>
+    <h2 class="reveal d1">The doctor who has studied <span class="serif">one body.</span> Yours.</h2>
+    <p class="reveal d2">Every illness teaches Prodromal your patterns a little deeper — how you get sick, what works for you, how fast you bounce back. After three, it knows things your family doctor, seeing you once a year, never could.</p>
+
+  </div>
+</section>
+
+<!-- ======= TESTIMONIALS ======= -->
+<section class="testimonials">
+  <div class="testimonials-head">
+    <span class="kicker w-slash reveal">Early beta · 250 users</span>
+    <h2 class="reveal d1">Built for the <span class="serif">rest of us.</span></h2>
+  </div>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <!-- Set 1 -->
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">I started paying closer attention when something felt a little off. Having context for what I was feeling made me <em>less anxious</em>, not more.</p>
+        <div class="t-author"><div class="t-avatar av1">SC</div><div><div class="t-name">Sarah Chen</div><div class="t-meta">34 · San Francisco</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">For years my Apple Watch has shown me numbers I didn't know what to do with. Prodromal is the first thing that makes any of it feel <em>useful</em>.</p>
+        <div class="t-author"><div class="t-avatar av2">DO</div><div><div class="t-name">David Okafor</div><div class="t-meta">41 · Austin</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">As a junior doctor I came in skeptical. What won me over was seeing patterns in <em>my own body</em> I'd never have noticed on my own.</p>
+        <div class="t-author"><div class="t-avatar av3">MR</div><div><div class="t-name">Maya Rao</div><div class="t-meta">29 · London</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">Two kids in daycare means illness is constantly in the house. A clearer picture of what's going on with each of us takes some of the <em>chaos</em> out of it.</p>
+        <div class="t-author"><div class="t-avatar av4">JL</div><div><div class="t-name">Jessica Lindberg</div><div class="t-meta">36 · Minneapolis</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">Finals week. I noticed my signals drifting early and gave myself permission to slow down. Walked out the other side feeling <em>like myself</em>.</p>
+        <div class="t-author"><div class="t-avatar av5">TK</div><div><div class="t-name">Theo Kim</div><div class="t-meta">22 · Cambridge, MA</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">I travel 40 weeks a year. Understanding my own recovery patterns has changed how I plan around trips. Feels like having a <em>private coach</em>.</p>
+        <div class="t-author"><div class="t-avatar av6">AM</div><div><div class="t-name">Alex Moreau</div><div class="t-meta">47 · New York</div></div></div>
+      </div>
+      <!-- Set 2 -->
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">I started paying closer attention when something felt a little off. Having context for what I was feeling made me <em>less anxious</em>, not more.</p>
+        <div class="t-author"><div class="t-avatar av1">SC</div><div><div class="t-name">Sarah Chen</div><div class="t-meta">34 · San Francisco</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">For years my Apple Watch has shown me numbers I didn't know what to do with. Prodromal is the first thing that makes any of it feel <em>useful</em>.</p>
+        <div class="t-author"><div class="t-avatar av2">DO</div><div><div class="t-name">David Okafor</div><div class="t-meta">41 · Austin</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">As a junior doctor I came in skeptical. What won me over was seeing patterns in <em>my own body</em> I'd never have noticed on my own.</p>
+        <div class="t-author"><div class="t-avatar av3">MR</div><div><div class="t-name">Maya Rao</div><div class="t-meta">29 · London</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">Two kids in daycare means illness is constantly in the house. A clearer picture of what's going on with each of us takes some of the <em>chaos</em> out of it.</p>
+        <div class="t-author"><div class="t-avatar av4">JL</div><div><div class="t-name">Jessica Lindberg</div><div class="t-meta">36 · Minneapolis</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">Finals week. I noticed my signals drifting early and gave myself permission to slow down. Walked out the other side feeling <em>like myself</em>.</p>
+        <div class="t-author"><div class="t-avatar av5">TK</div><div><div class="t-name">Theo Kim</div><div class="t-meta">22 · Cambridge, MA</div></div></div>
+      </div>
+      <div class="t-card">
+        <span class="t-mark">"</span>
+        <p class="t-text">I travel 40 weeks a year. Understanding my own recovery patterns has changed how I plan around trips. Feels like having a <em>private coach</em>.</p>
+        <div class="t-author"><div class="t-avatar av6">AM</div><div><div class="t-name">Alex Moreau</div><div class="t-meta">47 · New York</div></div></div>
+      </div>
+    </div>
+  </div>
+  <p class="t-disclaimer">Individual experiences vary. Prodromal is not a medical device and does not diagnose or treat any condition.</p>
+</section>
+
+<!-- ======= SCIENCE ======= -->
+<section class="section" id="science">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="kicker w-slash reveal">Grounded in research</span>
+        <h2 class="reveal d1">The signal is real.<br/><span class="serif">The technology is now.</span></h2>
+      </div>
+      <p class="reveal d2">For decades, doctors have known vitals drift before symptoms. What's new: every modern Apple Watch records that drift — and we finally have the AI to read it.</p>
+    </div>
+
+    <div class="science-grid">
+      <div class="sci reveal">
+        <div class="sci-stat">2.2%</div>
+        <p>Average HRV drop detected 48 hours before COVID-19 symptoms in a study of 31,000 participants wearing wearables.</p>
+        <div class="sci-source">Mishra et al · Nature · 2020</div>
+      </div>
+      <div class="sci reveal d1">
+        <div class="sci-stat">24–36h</div>
+        <p>Window in which resting heart rate and respiratory rate rise before the first noticeable symptom of upper-respiratory infection.</p>
+        <div class="sci-source">Stanford Healthcare Innovation Lab</div>
+      </div>
+      <div class="sci reveal d2">
+        <div class="sci-stat">$340</div>
+        <p>Average cost per sick day to a US employer in 2023 — before knock-on effects to customers, teammates, and families.</p>
+        <div class="sci-source">Integrated Benefits Institute</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= PRICING ======= -->
+<section class="pricing" id="pricing">
+  <div class="pricing-head">
+    <span class="kicker w-slash reveal">Pricing</span>
+    <h2 class="reveal d1">A year of Prodromal costs less than a <span class="serif">quarter</span> of a single doctor's visit.</h2>
+
+    <div class="price-contrast reveal d2">
+      <div class="price-contrast-col">
+        <div class="price-contrast-num">$200</div>
+        <div class="price-contrast-label">One US primary-care visit</div>
+      </div>
+      <div class="price-contrast-vs">vs.</div>
+      <div class="price-contrast-col price-contrast-col-hero">
+        <div class="price-contrast-num">$49.99</div>
+        <div class="price-contrast-label">One full year of Prodromal</div>
+      </div>
+    </div>
+
+    <p class="reveal d2">7-day free trial. Cancel in two taps before it ends — no charge.</p>
+  </div>
+
+  <div class="pricing-grid">
+    <!-- Monthly -->
+    <div class="plan reveal">
+      <div class="plan-name">Monthly</div>
+      <div class="plan-price"><span class="plan-amount">$6.99</span><span class="plan-period">/ month</span></div>
+      <div class="plan-billing">No commitment. Cancel anytime.</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li><span class="check"></span>Unlimited illness episodes</li>
+        <li><span class="check"></span>Dynamic protocols that adapt to you</li>
+        <li><span class="check"></span>Full pattern analysis across every episode</li>
+        <li><span class="check"></span>Unlimited chat during an episode</li>
+        <li><span class="check"></span>Pantry Protocol</li>
+        <li><span class="check"></span>Victory Vault</li>
+      </ul>
+      <button class="plan-cta cta-ghost" onclick="openModal()">Start free trial</button>
+    </div>
+
+    <!-- Annual (featured) -->
+    <div class="plan plan-featured reveal d1">
+      <div class="plan-name">Annual</div>
+      <div class="plan-price"><span class="plan-amount">$49.99</span><span class="plan-period">/ year</span></div>
+      <div class="plan-billing">$4.17/mo billed annually <span class="plan-save-badge">Save 40%</span></div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li><span class="check"></span>Unlimited illness episodes</li>
+        <li><span class="check"></span>Dynamic protocols that adapt to you</li>
+        <li><span class="check"></span>Full pattern analysis across every episode</li>
+        <li><span class="check"></span>Unlimited chat during an episode</li>
+        <li><span class="check"></span>Pantry Protocol</li>
+        <li><span class="check"></span>Victory Vault</li>
+      </ul>
+      <button class="plan-cta cta-solid" onclick="openModal()">Start 7-day free trial</button>
+    </div>
+
+    <!-- Pro+ -->
+    <div class="plan reveal d2">
+      <div class="plan-name">Pro+</div>
+      <div class="plan-price"><span class="plan-amount">$99</span><span class="plan-period">/ year</span></div>
+      <div class="plan-billing">$8.25/mo · For the power user</div>
+      <div class="plan-divider"></div>
+      <ul class="plan-features">
+        <li><span class="check"></span>Everything in Annual</li>
+        <li><span class="check"></span>Priority AI — faster responses, latest model</li>
+        <li><span class="check"></span>Doctor-ready PDF reports of your patterns</li>
+        <li><span class="check"></span>Deeper multi-year trend analysis</li>
+        <li><span class="check"></span>Early access to new features</li>
+      </ul>
+      <button class="plan-cta cta-ghost" onclick="openModal()">Start 7-day free trial</button>
+    </div>
+  </div>
+
+  <p class="pricing-foot reveal d2">Or start with <a href="#" onclick="openModal();return false;">Prodromal Free</a> — one illness episode per year, no card required.</p>
+</section>
+
+<!-- ======= FINAL ======= -->
+<section class="final">
+  <span class="kicker w-slash reveal">Your next illness</span>
+  <h2 class="reveal d1">Starts in about <span class="serif">three weeks.</span></h2>
+  <p class="reveal d2">Be the first in the door. We'll email you the moment Prodromal hits the App Store.</p>
+  <button class="btn reveal d3" onclick="openModal()">Get early access <span class="arr">→</span></button>
+</section>
+
+</main>
+
+<!-- ======= FOOTER ======= -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#" class="nav-brand">
+        <span class="nav-mark"></span>
+        Prodromal
+      </a>
+      <p class="footer-tag">The first AI health coach that catches illness before symptoms.</p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Product</div>
+      <a href="#how">How it works</a>
+      <a href="#science">Science</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Legal</div>
+      <a href="/PRIVACY">Privacy</a>
+      <a href="/TERMS">Terms</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">Contact</div>
+      <a href="mailto:support@prodromal.ai">support@prodromal.ai</a>
+      <a href="mailto:privacy@prodromal.ai">privacy@prodromal.ai</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Prodromal · Singapore</span>
+    <span>Not a medical device · Not a diagnosis</span>
+  </div>
+</footer>
+
+<!-- ======= MODAL ======= -->
+<div class="modal-backdrop" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalContent">
+      <div class="kicker w-slash">Get early access</div>
+      <h3>Be the <span class="serif">first</span> in the door.</h3>
+      <p>We'll email you the moment Prodromal hits the App Store. No spam. One email.</p>
+      <form onsubmit="handleSubmit(event)">
+        <input type="email" id="emailInput" placeholder="your@email.com" required />
+        <button type="submit">Notify me on launch</button>
+      </form>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <h3>You're <span class="serif">in.</span></h3>
+      <p>We'll be in touch the day Prodromal goes live on the App Store.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  const modal = document.getElementById('modal');
+  function openModal() {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('emailInput')?.focus(), 100);
+  }
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+      document.getElementById('modalContent').style.display = 'block';
+      document.getElementById('modalSuccess').classList.remove('active');
+      document.getElementById('emailInput').value = '';
+    }, 300);
+  }
+  function handleSubmit(e) {
+    e.preventDefault();
+    const email = document.getElementById('emailInput').value;
+    const waitlist = JSON.parse(localStorage.getItem('prodromal_waitlist') || '[]');
+    waitlist.push({ email, ts: new Date().toISOString() });
+    localStorage.setItem('prodromal_waitlist', JSON.stringify(waitlist));
+    console.log('Waitlist signup:', email);
+    document.getElementById('modalContent').style.display = 'none';
+    document.getElementById('modalSuccess').classList.add('active');
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+  });
+</script>
+
+</body>
+</html>
