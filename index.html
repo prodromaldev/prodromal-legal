@@ -113,6 +113,16 @@
   p.body  { font-size: 17px; line-height: 1.62; color: var(--ink-soft); max-width: 56ch; }
   p.muted { color: var(--muted); }
   p.small { font-size: 15px; line-height: 1.6; color: var(--muted); max-width: 60ch; }
+  /* Phase trailing line — use emerald as a small brand accent */
+  .phase p.small {
+    color: var(--primary);
+    font-style: italic;
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.45;
+    opacity: 0.85;
+    margin-top: 8px;
+  }
   p.tiny  { font-size: 13px; line-height: 1.55; color: var(--muted); }
 
   /* ========= BUTTONS ========= */
@@ -298,15 +308,16 @@
 
   /* ========= PROBLEM / SOLUTION MOMENTS ========= */
   .moment {
-    padding: 160px 0;
+    padding: 160px 0 60px;
     text-align: center;
     position: relative;
   }
+  .moment + .moment { padding: 60px 0 160px; }
   .moment.on-surface { background: var(--surface); }
   .moment.on-surface-deep { background: var(--surface-deep); }
   .moment .inner { max-width: 880px; margin: 0 auto; padding: 0 48px; }
-  .moment h2 { margin-bottom: 32px; text-wrap: balance; }
-  .moment .kicker { display: block; margin-bottom: 40px; }
+  .moment h2 { margin-bottom: 24px; text-wrap: balance; }
+  .moment .kicker { display: block; margin-bottom: 28px; }
   .moment p.lead { margin: 32px auto 0; font-size: 20px; }
 
   .moment-sub {
@@ -314,15 +325,15 @@
     font-size: clamp(24px, 2.6vw, 32px);
     font-style: italic;
     color: var(--secondary);
-    margin-top: 24px;
+    margin-top: 20px;
   }
 
   .connector {
     display: block;
-    width: 1px; height: 96px;
+    width: 1px; height: 48px;
     background: linear-gradient(180deg, var(--primary), transparent);
-    margin: 32px auto 0;
-    opacity: 0.6;
+    margin: 36px auto 0;
+    opacity: 0.5;
   }
 
   /* ========= HOW IT WORKS ========= */
@@ -412,9 +423,10 @@
   }
   .doctor .kicker { color: var(--secondary-glow); margin-bottom: 64px; display: block; }
 
-  /* Breathing POrb — web version of the app's signature element */
+  /* Breathing POrb — web version of the app's signature element.
+     Pulse is loud + visible: sonar-like ripple rings + strong core breath. */
   .porb-wrap {
-    width: 180px; height: 180px;
+    width: 200px; height: 200px;
     position: relative;
     margin-bottom: 72px;
   }
@@ -422,54 +434,87 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 1px solid rgba(155, 212, 192, 0.25);
+    border: 1.5px solid rgba(155, 212, 192, 0.5);
+    will-change: transform, opacity;
   }
+  /* Outer sonar ripple — expands outward and fades */
   .porb-ring.r-outer {
-    inset: 0;
-    animation: porbPulseOuter 4s ease-in-out infinite;
+    animation: porbRipple 3.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   }
+  /* Mid sonar ripple — same but offset 1.2s for continuous waves */
   .porb-ring.r-mid {
-    inset: 18px;
-    border-color: rgba(155, 212, 192, 0.35);
-    animation: porbPulseMid 3s ease-in-out infinite;
+    animation: porbRipple 3.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+    animation-delay: 1.2s;
   }
+  /* Inner tight pulse — sits close to core, quick visible beat */
   .porb-ring.r-inner {
-    inset: 40px;
-    border-color: rgba(155, 212, 192, 0.45);
-    animation: porbPulseInner 2.2s ease-in-out infinite;
+    inset: 50px;
+    border-color: rgba(155, 212, 192, 0.7);
+    animation: porbTightPulse 1.8s ease-in-out infinite;
   }
   .porb-core {
     position: absolute;
-    inset: 62px;
+    inset: 72px;
     border-radius: 50%;
     background: radial-gradient(
       circle at 38% 32%,
-      #D8EDE0 0%,
+      #E8F4EC 0%,
       #9BD4C0 38%,
       #6DB39A 70%,
       #2E5A48 100%
     );
     box-shadow:
-      0 0 40px rgba(155, 212, 192, 0.35),
+      0 0 40px rgba(155, 212, 192, 0.45),
       inset 0 -8px 16px rgba(0, 0, 0, 0.2),
-      inset 0 6px 12px rgba(255, 255, 255, 0.15);
-    animation: porbBreath 8s ease-in-out infinite;
+      inset 0 6px 12px rgba(255, 255, 255, 0.18);
+    animation: porbBreath 3.5s ease-in-out infinite;
+    will-change: transform, filter, box-shadow;
   }
+  /* Strong breath — dramatically obvious scale + brightness */
   @keyframes porbBreath {
-    0%, 100% { transform: scale(1); filter: brightness(1); }
-    50%      { transform: scale(1.06); filter: brightness(1.08); }
+    0%, 100% {
+      transform: scale(1);
+      filter: brightness(0.95);
+      box-shadow:
+        0 0 30px rgba(155, 212, 192, 0.35),
+        inset 0 -8px 16px rgba(0, 0, 0, 0.22),
+        inset 0 6px 12px rgba(255, 255, 255, 0.15);
+    }
+    50% {
+      transform: scale(1.14);
+      filter: brightness(1.18);
+      box-shadow:
+        0 0 70px rgba(155, 212, 192, 0.75),
+        inset 0 -8px 16px rgba(0, 0, 0, 0.18),
+        inset 0 8px 16px rgba(255, 255, 255, 0.28);
+    }
   }
-  @keyframes porbPulseOuter {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50%      { opacity: 0.9; transform: scale(1.03); }
+  /* Sonar ripple — clearly visible expansion + fade */
+  @keyframes porbRipple {
+    0% {
+      transform: scale(0.55);
+      opacity: 0;
+    }
+    15% {
+      opacity: 0.95;
+    }
+    100% {
+      transform: scale(1.35);
+      opacity: 0;
+    }
   }
-  @keyframes porbPulseMid {
-    0%, 100% { opacity: 0.5; }
-    50%      { opacity: 0.85; }
-  }
-  @keyframes porbPulseInner {
-    0%, 100% { opacity: 0.55; transform: scale(1); }
-    55%      { opacity: 1; transform: scale(1.02); }
+  /* Tight pulse near the core — a clear heartbeat */
+  @keyframes porbTightPulse {
+    0%, 100% {
+      transform: scale(0.98);
+      opacity: 0.45;
+      border-color: rgba(155, 212, 192, 0.45);
+    }
+    50% {
+      transform: scale(1.08);
+      opacity: 1;
+      border-color: rgba(232, 244, 236, 0.95);
+    }
   }
 
   .doctor h2 {
@@ -507,16 +552,32 @@
 
   /* ========= TESTIMONIALS ========= */
   .testimonials {
-    padding: 140px 0;
+    padding: 140px 0 120px;
     background: var(--surface);
+    overflow: hidden;
   }
-  .testimonials header { text-align: center; margin-bottom: 80px; }
+  .testimonials header { text-align: center; margin-bottom: 72px; padding: 0 32px; }
   .testimonials header h2 { max-width: 18ch; margin: 16px auto 0; }
-  .t-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
+
+  .marquee {
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
   }
+  .marquee-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: marqueeScroll 120s linear infinite;
+    will-change: transform;
+  }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  @keyframes marqueeScroll {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+
   .t-card {
     background: var(--bg);
     padding: 40px 36px 36px;
@@ -524,6 +585,11 @@
     position: relative;
     box-shadow: 0 1px 0 rgba(45, 37, 32, 0.04);
     border: 1px solid var(--hairline);
+    width: 440px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
   .t-card .mark {
     font-family: var(--serif); font-style: italic; font-size: 56px; line-height: 1;
@@ -546,8 +612,8 @@
   .t-card .name { font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.2; }
   .t-card .meta { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
   .disclaimer { margin-top: 40px; text-align: center; }
-  @media (max-width: 900px) {
-    .t-grid { grid-template-columns: 1fr; }
+  @media (max-width: 720px) {
+    .t-card { width: 320px; padding: 28px 24px; }
   }
 
   /* ========= SCIENCE ========= */
@@ -1010,7 +1076,7 @@
   </section>
 
   <!-- 3. SOLUTION -->
-  <section class="moment on-surface" style="padding-top: 60px;">
+  <section class="moment on-surface">
     <div class="inner">
       <span class="kicker emerald">Until now</span>
       <h2 class="serif">Prodromal reads the signal — and teaches you to catch illness <span class="italic">before</span> it catches you.</h2>
@@ -1095,16 +1161,17 @@
     </div>
   </section>
 
-  <!-- 6. TESTIMONIALS -->
+  <!-- 6. TESTIMONIALS — scrolling marquee -->
   <section class="testimonials">
-    <div class="wrap">
-      <header class="reveal">
-        <span class="kicker amber">Early readers</span>
-        <h2 class="serif">What the first families have been saying.</h2>
-      </header>
+    <header class="reveal">
+      <span class="kicker amber">Early readers</span>
+      <h2 class="serif">What the first families have been saying.</h2>
+    </header>
 
-      <div class="t-grid">
-        <figure class="t-card reveal">
+    <div class="marquee">
+      <div class="marquee-track">
+        <!-- Set A -->
+        <figure class="t-card">
           <span class="mark" aria-hidden="true">&ldquo;</span>
           <blockquote>I started paying closer attention when something felt a little off. Having context for what I was feeling made me less anxious, not more.</blockquote>
           <figcaption class="who">
@@ -1115,8 +1182,7 @@
             </span>
           </figcaption>
         </figure>
-
-        <figure class="t-card reveal">
+        <figure class="t-card">
           <span class="mark" aria-hidden="true">&ldquo;</span>
           <blockquote>For years my Apple Watch has shown me numbers I didn't know what to do with. Prodromal is the first thing that makes any of it feel useful.</blockquote>
           <figcaption class="who">
@@ -1127,8 +1193,18 @@
             </span>
           </figcaption>
         </figure>
-
-        <figure class="t-card reveal">
+        <figure class="t-card">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>As a junior doctor I came in skeptical. What won me over was seeing patterns in my own body I'd never have noticed on my own.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">M</span>
+            <span>
+              <div class="name">Maya Rao</div>
+              <div class="meta">29 · London</div>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="t-card">
           <span class="mark" aria-hidden="true">&ldquo;</span>
           <blockquote>Two kids in daycare means illness is constantly in the house. A clearer picture of what's going on with each of us takes some of the chaos out of it.</blockquote>
           <figcaption class="who">
@@ -1139,10 +1215,99 @@
             </span>
           </figcaption>
         </figure>
+        <figure class="t-card">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>Finals week. I noticed my signals drifting early and gave myself permission to slow down. Walked out the other side feeling like myself.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">T</span>
+            <span>
+              <div class="name">Theo Kim</div>
+              <div class="meta">22 · Cambridge, MA</div>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="t-card">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>I travel 40 weeks a year. Understanding my own recovery patterns has changed how I plan around trips. Feels like having a private coach.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">A</span>
+            <span>
+              <div class="name">Alex Moreau</div>
+              <div class="meta">47 · New York</div>
+            </span>
+          </figcaption>
+        </figure>
+        <!-- Set B — duplicate for seamless loop -->
+        <figure class="t-card" aria-hidden="true">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>I started paying closer attention when something felt a little off. Having context for what I was feeling made me less anxious, not more.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">S</span>
+            <span>
+              <div class="name">Sarah Chen</div>
+              <div class="meta">34 · San Francisco</div>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="t-card" aria-hidden="true">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>For years my Apple Watch has shown me numbers I didn't know what to do with. Prodromal is the first thing that makes any of it feel useful.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">D</span>
+            <span>
+              <div class="name">David Okafor</div>
+              <div class="meta">41 · Austin</div>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="t-card" aria-hidden="true">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>As a junior doctor I came in skeptical. What won me over was seeing patterns in my own body I'd never have noticed on my own.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">M</span>
+            <span>
+              <div class="name">Maya Rao</div>
+              <div class="meta">29 · London</div>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="t-card" aria-hidden="true">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>Two kids in daycare means illness is constantly in the house. A clearer picture of what's going on with each of us takes some of the chaos out of it.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">J</span>
+            <span>
+              <div class="name">Jessica Lindberg</div>
+              <div class="meta">36 · Minneapolis</div>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="t-card" aria-hidden="true">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>Finals week. I noticed my signals drifting early and gave myself permission to slow down. Walked out the other side feeling like myself.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">T</span>
+            <span>
+              <div class="name">Theo Kim</div>
+              <div class="meta">22 · Cambridge, MA</div>
+            </span>
+          </figcaption>
+        </figure>
+        <figure class="t-card" aria-hidden="true">
+          <span class="mark" aria-hidden="true">&ldquo;</span>
+          <blockquote>I travel 40 weeks a year. Understanding my own recovery patterns has changed how I plan around trips. Feels like having a private coach.</blockquote>
+          <figcaption class="who">
+            <span class="avatar" aria-hidden="true">A</span>
+            <span>
+              <div class="name">Alex Moreau</div>
+              <div class="meta">47 · New York</div>
+            </span>
+          </figcaption>
+        </figure>
       </div>
-
-      <p class="tiny disclaimer">Individual experiences vary. Prodromal is not a medical device and does not diagnose or treat any condition.</p>
     </div>
+
+    <p class="tiny disclaimer" style="text-align: center; margin-top: 48px; padding: 0 32px;">Individual experiences vary. Prodromal is not a medical device and does not diagnose or treat any condition.</p>
   </section>
 
   <!-- 7. SCIENCE -->
